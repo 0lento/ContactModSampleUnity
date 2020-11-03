@@ -16,6 +16,11 @@ public class ContactModManager : MonoBehaviour
         Physics.ContactModifyEvent = ModificationCallback;
     }
 
+    private void OnDestroy()
+    {
+        modifiableColliders.Dispose();
+    }
+
     private void SetupContactModGameObjects(string gameObjectTag, ContactModType contactModType)
     {
         // find gameobjects with specific tag to mark them for contact modification + cache their data on hash map
@@ -51,7 +56,7 @@ public class ContactModManager : MonoBehaviour
 
     private void ModifyBoostPair(ModifiableContactPair pair)
     {
-        for (int i = 0; i< pair.contactsCount; i++)
+        for (int i = 0; i < pair.contactsCount; i++)
         {
             // set the target velocity to create "boost pad".
             pair.SetTargetVelocity(i, new Vector3(-35, 0, 0));
