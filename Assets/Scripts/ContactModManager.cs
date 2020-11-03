@@ -9,16 +9,17 @@ public class ContactModManager : MonoBehaviour
     void Start()
     {
         modifiableColliders = new NativeHashMap<int, ContactModType>(10, Allocator.Persistent);
-        SetupContactModGameObjects(GameObject.FindGameObjectsWithTag("Boost"), ContactModType.Boost);
-        SetupContactModGameObjects(GameObject.FindGameObjectsWithTag("NoSeparation"), ContactModType.NoSeparation);
-        SetupContactModGameObjects(GameObject.FindGameObjectsWithTag("Valve"), ContactModType.Valve);
+        SetupContactModGameObjects("Boost", ContactModType.Boost);
+        SetupContactModGameObjects("NoSeparation", ContactModType.NoSeparation);
+        SetupContactModGameObjects("Valve", ContactModType.Valve);
 
         Physics.ContactModifyEvent = ModificationCallback;
     }
 
-    private void SetupContactModGameObjects(GameObject[] gameObjects, ContactModType contactModType)
+    private void SetupContactModGameObjects(string gameObjectTag, ContactModType contactModType)
     {
-        foreach (GameObject gameObject in gameObjects)
+        // find gameobjects with specific tag to mark them for contact modification + cache their data on hash map
+        foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag(gameObjectTag))
         {
             Collider collider = gameObject.GetComponent<Collider>();
             if (collider == null)
