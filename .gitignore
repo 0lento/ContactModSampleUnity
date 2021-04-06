@@ -11,6 +11,7 @@
 [Ss]treaming[Aa]ssets.meta
 .vs
 .vscode
+.vsconfig
 .idea
 .DS_Store
 *.aspx

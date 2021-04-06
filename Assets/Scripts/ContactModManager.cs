@@ -13,12 +13,13 @@ public class ContactModManager : MonoBehaviour
         SetupContactModGameObjects("NoSeparation", ContactModType.NoSeparation);
         SetupContactModGameObjects("Valve", ContactModType.Valve);
 
-        Physics.ContactModifyEvent = ModificationCallback;
+        Physics.ContactModifyEvent += ModificationCallback;
     }
 
     private void OnDestroy()
     {
         modifiableColliders.Dispose();
+        Physics.ContactModifyEvent -= ModificationCallback;
     }
 
     private void SetupContactModGameObjects(string gameObjectTag, ContactModType contactModType)
@@ -56,7 +57,7 @@ public class ContactModManager : MonoBehaviour
 
     private void ModifyBoostPair(ModifiableContactPair pair)
     {
-        for (int i = 0; i < pair.contactsCount; i++)
+        for (int i = 0; i < pair.contactCount; i++)
         {
             // set the target velocity to create "boost pad".
             pair.SetTargetVelocity(i, new Vector3(-35, 0, 0));
@@ -65,7 +66,7 @@ public class ContactModManager : MonoBehaviour
 
     private void ModifyNoSeparationPair(ModifiableContactPair pair)
     {
-        for (int i = 0; i < pair.contactsCount; i++)
+        for (int i = 0; i < pair.contactCount; i++)
         {
             // ignore contacts that have positive separation to prevent ball from bouncing on collider seams
             if (pair.GetSeparation(i) > 0)
@@ -75,7 +76,7 @@ public class ContactModManager : MonoBehaviour
 
     private void ModifyValvePair(ModifiableContactPair pair)
     {
-        for (int i = 0; i < pair.contactsCount; i++)
+        for (int i = 0; i < pair.contactCount; i++)
         {
             // ignore contacts that have right facing normal to create a valve like behaviour
             if (Vector3.Dot(Vector3.right, pair.GetNormal(i)) > 0)
